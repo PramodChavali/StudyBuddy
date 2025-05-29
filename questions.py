@@ -12,13 +12,6 @@ apiKey = os.getenv("API_KEY")
 
 ####################################################################################
 
-
-file = open("frequency.txt", "r")
-numMins = int(file.read(-1))
-file.close()
-
-startTime = time()
-
 #subject and grade
 file = open("subjects.txt", "r")
 subject = file.read(-1)
