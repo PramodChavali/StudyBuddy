@@ -2,7 +2,7 @@ from tkinter import *
 from subprocess import Popen
 
 root = Tk()
-root.title("START STUDYING SETUP")
+root.title("Study Buddy!")
 screen = Canvas(root, width=800, height=600, bg="#2a243b")
 screen.pack()
 

@@ -48,7 +48,7 @@ def startTimer():
 
         stoppedOrNot = ""
         root = Tk()
-        root.title("STUDDY BUDDY")
+        root.title("ANSWER OR DIE")
         screen = Canvas(root, width=1920, height=1080, bg="#2a243b")
         GenerateQuestions()
 
@@ -165,6 +165,7 @@ def SetUpScreen(groups, questionY, responses):
     
     root.attributes("-fullscreen", True)
     screen.mainloop()
+    #root.bind()
 
 def onButtonClick(response):
         
