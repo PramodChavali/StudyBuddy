@@ -9,7 +9,7 @@ import random
 
 startTime = time()
 
-global grade, subject, frequency, screen
+global grade, subject, frequency, screen, midScreenX, midScreenY
 
 file = open("frequency.txt", "r")
 frequency = float(file.read(-1))
@@ -34,7 +34,7 @@ class response:
 
 def startTimer():
 
-    global screen, root
+    global screen, root, midScreenX, midScreenY
     startTime = time()
     
     while True:
@@ -49,7 +49,14 @@ def startTimer():
         stoppedOrNot = ""
         root = Tk()
         root.title("ANSWER OR DIE")
-        screen = Canvas(root, width=1920, height=1080, bg="#2a243b")
+        
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+        screen = Canvas(root, width=screen_width, height=screen_height, bg="#2a243b")
+
+        midScreenX = screen_width // 2
+        midScreenY = screen_height // 2
+
         GenerateQuestions()
 
     else:
@@ -59,52 +66,74 @@ def GenerateQuestions():
 
     global grade, subject
 
-    geminiPrompt = f"You are a helpful assistant that creates educational multiple choice questions based on the given prompts. The questions should all be from the ontario curriculum for high school, the grade and subject will be specified in the prompt Here is the prompt to create the question: Create a multiple-choice question for a high school student in grade {grade} studying the course {subject}. The question should be based on the Ontario curriculum and should have three answer choices labeled A, B, and C. The 3rd answer should always be the correcet answer (Answer C). Make sure that there are no duplicate answers. Dont be afraid to give word problems, just make the answer multiple choice. Do not include any special unicode characters, subscripts or super scripts, or accents on letters. Produce the response in exactly this format but do not include the brackets: (Question) | (Answer A) | (Answer B) | (Answer C)"
-
-
-    questions.main(geminiPrompt) #generate question
-
-    #get answers
-    file = open("questions/question.txt", "r")
-    question = file.read(-1)
+    file = open("prevQuestion.txt", "r")
+    prevQuestion = file.read(-1)
     file.close()
 
-    print(question)
 
-    file = open("questions/answerA.txt", "r")
-    answerA = file.read(-1)
-    file.close()
+    while True:
 
-    file = open("questions/answerB.txt", "r")
-    answerB = file.read(-1)
-    file.close()
+        geminiPrompt = f"You are a helpful assistant that creates educational multiple choice questions based on the given prompts. The questions should all be from the ontario curriculum for high school, the grade and subject will be specified in the prompt Here is the prompt to create the question: Create a multiple-choice question for a high school student in grade {grade} studying the course {subject}. The question should be based on the Ontario curriculum and should have three answer choices (Answer A, Answer B and Answer C), do not label them at all as A B and C or 1 2 and 3, etc. The 3rd answer should always be the correcet answer (Answer C). Ensure that all the possible answers are different, and make sure the questions properly relate to the subject {subject}. Ensure that the question is not similar to the previous question which is this: {prevQuestion}. Dont be afraid to give word problems, just make the answer multiple choice. Do not include any special unicode characters, subscripts or super scripts, or accents on letters. Produce the response in exactly this format but do not include the brackets: (Question) | (Answer A) | (Answer B) | (Answer C)"
+        
 
-    file = open("questions/answerC.txt", "r") #correct answer
-    answerC = file.read(-1)
-    file.close()
+        try:
+            questionArray = questions.main(geminiPrompt) #generate question
+
+            file = open("prevQuestion.txt", "w")
+            file.write(questionArray[0])  # save the question to a file
+            file.close()
+
+            print(questionArray)
+
+            answerA = questionArray[1]
+            answerB = questionArray[2]
+            answerC = questionArray[3]
+            question = questionArray[0]
+
+            print("NOW IN GENERATE QUESTIONS")
+            print(question, "question")
+            print(answerA, "answerA")
+            print(answerB, "answerB")
+            print(answerC, "answerC")
+            
+            if answerA == answerB or answerA == answerC or answerB == answerC:
+                print()
+
+            else:
+                break
+            
+
+        except UnicodeEncodeError:
+            print("Unicode error, generating new question...")
 
     SetUpQuestions(answerA=answerA, answerB=answerB, answerC=answerC, question=question)
 
 def SetUpQuestions(answerA, answerB, answerC, question):
 
-    #shuffle answers
     answers = [answerA, answerB, answerC]
+    
 
-    response1 = response(random.choice(answers), False)
-    response2 = response(random.choice(answers), False)
-    response3 = response(random.choice(answers), False)
+    response1 = response(answers[0], False)
+    #answers.remove(answerA)  # remove the chosen answer from the list
+    response2 = response(answers[1], False)
+    #answers.remove(answerB)
+    response3 = response(answers[2], True)
+    #answers.remove(answerC)
 
     responses = [response1, response2, response3]
+    random.shuffle(responses)  # shuffle the responses to randomize their order
 
-    for i in range(3):
-        if responses[i].question == answerC:
-            responses[i].isAnswer = True
-            
+    for i in range(len(responses)):
+        print("responses", responses[i].question)
+
+
+    #AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH    
 
     questionParts = question.split(" ")
     prevIndex = 0
-    print(questionParts)
+    print(questionParts, "questionParts")
     groups = []
+    totalWords = []
     stringHolder = ""
 
     for i in range(len(questionParts)):
@@ -131,9 +160,11 @@ def SetUpQuestions(answerA, answerB, answerC, question):
             else:
                 groups.append(stringHolder)
                 stringHolder = questionParts[i] + " "
-        
 
-    questionY = 100
+
+    for i in range(len(totalWords)):
+        groups += totalWords[i]
+    questionY = 50
     print(groups)
     SetUpScreen(groups, questionY, responses)
 
@@ -141,40 +172,45 @@ def SetUpScreen(groups, questionY, responses):
 
     print("Setting up screen...")
 
-    global screen, root
-    screen.pack()
+    global screen, root, midScreenX, midScreenY
+    
 
     for i in range(len(groups)):
-        screen.create_text(960, questionY, text=groups[i], font="Arial 30", fill="white")
+        screen.create_text(midScreenX, questionY, text=groups[i], font="Arial 30", fill="white")
         questionY += 60
 
-    screen.create_text(960, questionY + 100, text=f"A: {responses[0].question}", font="Arial 20", fill="white")
-    screen.create_text(960, questionY + 200, text=f"B: {responses[1].question}", font="Arial 20", fill="white")
-    screen.create_text(960, questionY + 300, text=f"C: {responses[2].question}", font="Arial 20", fill="white")
+    print(responses[0].question, "response1 question")
+    print(responses[1].question, "response2 question")
+    print(responses[2].question, "response3 question")
+    
+
+    screen.create_text(midScreenX, questionY + 100, text=f"A: {responses[0].question}", font="Arial 20", fill="white")
+    screen.create_text(midScreenX, questionY + 200, text=f"B: {responses[1].question}", font="Arial 20", fill="white")
+    screen.create_text(midScreenX, questionY + 300, text=f"C: {responses[2].question}", font="Arial 20", fill="white")
 
 
     buttonA = Button(root, text="A", font="arial 20", command=lambda: onButtonClick(responses[0]))
-    screen.create_window(960, questionY + 450, window=buttonA)
+    screen.create_window(midScreenX - 100, questionY + 450, window=buttonA)
 
     buttonB = Button(root, text="B", font="arial 20", command=lambda: onButtonClick(responses[1]))
-    screen.create_window(960, questionY + 550, window=buttonB)
+    screen.create_window(midScreenX, questionY + 450, window=buttonB)
 
     buttonC = Button(root, text="C", font="arial 20", command=lambda: onButtonClick(responses[2]))
-    screen.create_window(960, questionY + 650, window=buttonC)
+    screen.create_window(midScreenX + 100, questionY + 450, window=buttonC)
 
-    
+    screen.pack()
     root.attributes("-fullscreen", True)
+    root.bind("<Key>", KeyPressHandler)
     screen.mainloop()
-    #root.bind()
-
+    
 def onButtonClick(response):
         
-        global screen, root
+        global screen, root, midScreenX, midScreenY
 
         if response.isAnswer:
 
             screen.delete("all")
-            screen.create_text(960, 540, text="Correct!", font="Arial 50", fill="green")
+            screen.create_text(midScreenX, midScreenY, text="Correct!", font="Arial 50", fill="green")
             screen.update()
             sleep(1)
             root.destroy()
@@ -182,12 +218,17 @@ def onButtonClick(response):
 
         else:
             screen.delete("all")
-            screen.create_text(960, 540, text="Incorrect!", font="Arial 50", fill="red")
+            screen.create_text(midScreenX, midScreenY, text="Incorrect!", font="Arial 50", fill="red")
             screen.update()
             sleep(1)
             screen.delete("all")
             GenerateQuestions()
 
+def KeyPressHandler(event):
+    global screen, root
+    print("key pressed")
+    sleep(2)
+    root.attributes("-fullscreen", True)
 
 if __name__ == "__main__":
     startTimer()

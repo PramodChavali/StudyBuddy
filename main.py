@@ -39,7 +39,7 @@ def showFrequencyQuestion():
     selectedOption.set(dropdownOptions[0])
     dropdown = OptionMenu(root, selectedOption, *dropdownOptions)
     screen.create_window(400, 400, window=dropdown)
-
+    
 
     #submit button
     submitButton = Button(root, text="Submit", font="arial 20", command=onFrequencySubmit)
@@ -84,7 +84,6 @@ def showSubjectQuestion():
 def endSetup():
     screen.delete("all")
     showQuestions("Setup Complete!", "Press here to", "stop studying")
-    #root.after(2000, root.destroy)  # Close the window after 2 seconds
     stopStudyingButton = Button(root, text="Stop Studying", font="arial 15", command=stopStudying)
     screen.create_window(400, 550, window=stopStudyingButton)
     Popen(["python", "popup.py"])
