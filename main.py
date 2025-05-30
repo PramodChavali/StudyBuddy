@@ -107,7 +107,6 @@ def onFrequencySubmit():
     saveToFile("frequency.txt", selectedOption.get())
     showSubjectQuestion()
 
-
 def onSubjectSubmit():
     print("selected subjects: ", selectedOption.get())
     saveToFile("subjects.txt", selectedOption.get())

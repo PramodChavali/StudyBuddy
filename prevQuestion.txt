@@ -1,1 +1,1 @@
-Question: A rectangular garden is 8 meters long and 6 meters wide. A path of uniform width is built around the garden. If the area of the path is equal to the area of the garden, what is the width of the path in meters?
+Question: A Ferris wheel has a radius of 10m and its centre is 12m above the ground. What is its max height?

@@ -73,7 +73,7 @@ def GenerateQuestions():
 
     while True:
 
-        geminiPrompt = f"You are a helpful assistant that creates educational multiple choice questions based on the given prompts. The questions should all be from the ontario curriculum for high school, the grade and subject will be specified in the prompt Here is the prompt to create the question: Create a multiple-choice question for a high school student in grade {grade} studying the course {subject}. The question should be based on the Ontario curriculum and should have three answer choices (Answer A, Answer B and Answer C), do not label them at all as A B and C or 1 2 and 3, etc. The 3rd answer should always be the correcet answer (Answer C). Ensure that all the possible answers are different, and make sure the questions properly relate to the subject {subject}. Ensure that the question is not similar to the previous question which is this: {prevQuestion}. Dont be afraid to give word problems, just make the answer multiple choice. Do not include any special unicode characters, subscripts or super scripts, or accents on letters. Produce the response in exactly this format but do not include the brackets: (Question) | (Answer A) | (Answer B) | (Answer C)"
+        geminiPrompt = f"You are a helpful assistant that creates educational multiple choice questions based on the given prompts. The questions should all be from the ontario curriculum for high school, the grade and subject will be specified in the prompt Here is the prompt to create the question: Create a multiple-choice question for a high school student in grade {grade} studying the course {subject}. The question should be based on the Ontario curriculum and should have three answer choices (Answer A, Answer B and Answer C), do not label them at all as A B and C or 1 2 and 3, etc. Word the answers in a way where they do not go over 100 characters. The 3rd answer should always be the correcet answer (Answer C). Ensure that all the possible answers are different, and make sure the questions properly relate to the subject {subject}. Ensure that the question is not similar to the previous question which is this: {prevQuestion}. Dont be afraid to give word problems, just make the answer multiple choice. Do not include any special unicode characters, subscripts or super scripts, or accents on letters. Produce the response in exactly this format but do not include the brackets: (Question) | (Answer A) | (Answer B) | (Answer C)"
         
 
         try:
@@ -114,7 +114,7 @@ def SetUpQuestions(answerA, answerB, answerC, question):
     
 
     response1 = response(answers[0], False)
-    #answers.remove(answerA)  # remove the chosen answer from the list
+    #answers.remove(answerA)  
     response2 = response(answers[1], False)
     #answers.remove(answerB)
     response3 = response(answers[2], True)
@@ -200,6 +200,7 @@ def SetUpScreen(groups, questionY, responses):
 
     screen.pack()
     root.attributes("-fullscreen", True)
+    root.attributes("-topmost", True)
     root.bind("<Key>", KeyPressHandler)
     screen.mainloop()
     
@@ -219,6 +220,7 @@ def onButtonClick(response):
         else:
             screen.delete("all")
             screen.create_text(midScreenX, midScreenY, text="Incorrect!", font="Arial 50", fill="red")
+            screen.create_text(midScreenX, midScreenY + 100, text="Generating new question...", font="Arial 30", fill="red")
             screen.update()
             sleep(1)
             screen.delete("all")
