@@ -1,19 +1,24 @@
 from tkinter import *
 from subprocess import Popen
+import popup
 
+#set up tkinter
 root = Tk()
 root.title("Study Buddy!")
 screen = Canvas(root, width=800, height=600, bg="#2a243b")
 screen.pack()
 
+#set up for dropdown menu
 questionStage = 0
 selectedOption = StringVar()
 selectedOption.set("")
 
+#tells the question timer that program is still going
 file = open("stopped.txt", "w")
 file.write("False")
 file.close()
 
+#show the first question
 def showGradeQuestion():
     #get the grade of the user
     screen.delete("all")
@@ -30,7 +35,7 @@ def showGradeQuestion():
     screen.create_window(400, 500, window=submitButton)
 
 def showFrequencyQuestion():
-    #get how often we can troll the user
+    #get how often we can troll the user with questions
     screen.delete("all")
     showQuestions("How often would you", "like to get questions?", " (in minutes)")
 
@@ -54,6 +59,7 @@ def showSubjectQuestion():
     grade = int(file.read(-1))
     file.close()
 
+    #subjects for each grade
     if grade == 9:
         dropdownOptions = ["Math", "Science", "Geography", "French"]
 
@@ -82,6 +88,7 @@ def showSubjectQuestion():
     screen.create_window(400, 500, window=submitButton)
 
 def endSetup():
+    #start the popup questions timer and file
     screen.delete("all")
     showQuestions("Setup Complete!", "Press here to", "stop studying")
     stopStudyingButton = Button(root, text="Stop Studying", font="arial 15", command=stopStudying)
@@ -89,30 +96,38 @@ def endSetup():
     Popen(["python", "popup.py"])
 
 def showQuestions(question, question2, question3):
+
+    #makes showing questions easier
     screen.create_text(400, 100, text=question, fill="white", font=("Arial", 50), anchor="center")
     screen.create_text(400, 200, text=question2, fill="white", font=("Arial", 50), anchor="center")
     screen.create_text(400, 300, text=question3, fill="white", font=("Arial", 50), anchor="center")
 
 def saveToFile(filepath, answer):
-    with open(filepath, "w") as file:
-        file.write(str(answer))
+    #saves the answer to a file
+    file = open(filepath, "w")
+    file.write(str(answer))
+    file.close()
 
 def onGradeSubmit():
+    #save the grade and show the next question
     print("selected grade: ", selectedOption.get())
     saveToFile("grade.txt", selectedOption.get())
     showFrequencyQuestion()
 
 def onFrequencySubmit():
+    #save the frequency and show the next question
     print("selected frequency: ", selectedOption.get())
     saveToFile("frequency.txt", selectedOption.get())
     showSubjectQuestion()
 
 def onSubjectSubmit():
+    #save the subjects and end the setup
     print("selected subjects: ", selectedOption.get())
     saveToFile("subjects.txt", selectedOption.get())
     endSetup()
 
 def stopStudying():
+    #stop the program
     file = open("stopped.txt", "w")
     file.write("True")
     file.close()

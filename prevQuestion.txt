@@ -1,1 +1,1 @@
-Question: A Ferris wheel has a radius of 10m and its centre is 12m above the ground. What is its max height?
+Question: A function f(x) = 2x + 3 is transformed to g(x) = f(x - 1) + 2. What is the new y-intercept?
