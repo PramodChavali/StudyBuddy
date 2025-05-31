@@ -87,6 +87,19 @@ def showSubjectQuestion():
     submitButton = Button(root, text="Submit", font="arial 20", command=onSubjectSubmit)
     screen.create_window(400, 500, window=submitButton)
 
+def showUnitQuestion():
+    #get the unit of the subject
+    screen.delete("all")
+    showQuestions("What unit do you", "want to study?", "")
+
+    
+    unitBox = Entry(root, font = "arial 20")
+    screen.create_window(400, 400, window=unitBox)
+
+    #submit button
+    submitButton = Button(root, text="Submit", font="arial 20", command=lambda: onUnitSubmit(unitBox))
+    screen.create_window(400, 500, window=submitButton)
+
 def endSetup():
     #start the popup questions timer and file
     screen.delete("all")
@@ -124,6 +137,12 @@ def onSubjectSubmit():
     #save the subjects and end the setup
     print("selected subjects: ", selectedOption.get())
     saveToFile("subjects.txt", selectedOption.get())
+    showUnitQuestion()
+
+def onUnitSubmit(textBox):
+    #save the unit and end the setup
+    print("selected unit: ", textBox.get())
+    saveToFile("unit.txt", textBox.get())
     endSetup()
 
 def stopStudying():

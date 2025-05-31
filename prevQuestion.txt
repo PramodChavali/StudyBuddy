@@ -1,1 +1,1 @@
-A company using a freemium model offers basic service for free but charges for premium features. What is this?
+A Ferris wheel with radius 10m rotates once/min. What is a rider's height above the ground after 15 seconds if they start at the bottom?
