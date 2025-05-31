@@ -1,1 +1,1 @@
-Question: A function f(x) = 2x + 3 is transformed to g(x) = f(x - 1) + 2. What is the new y-intercept?
+A company using a freemium model offers basic service for free but charges for premium features. What is this?
