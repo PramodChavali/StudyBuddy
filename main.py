@@ -40,7 +40,7 @@ def showFrequencyQuestion():
     showQuestions("How often would you", "like to get questions?", " (in minutes)")
 
     #dropdown menu
-    dropdownOptions = ["0.1", "5", "10", "15", "20"]
+    dropdownOptions = ["0.1", "0.5", "2", "5", "10", "15", "20"]
     selectedOption.set(dropdownOptions[0])
     dropdown = OptionMenu(root, selectedOption, *dropdownOptions)
     screen.create_window(400, 400, window=dropdown)

@@ -166,6 +166,7 @@ def SetUpQuestions(answerA, answerB, answerC, question):
 
 def SetUpScreen(groups, questionY, responses):
 
+    questionY = 50
     print("Setting up screen...")
 
     global screen, root, midScreenX, midScreenY, accuracy
@@ -201,10 +202,10 @@ def SetUpScreen(groups, questionY, responses):
     screen.pack()
     root.attributes("-fullscreen", True)
     root.attributes("-topmost", True) #even if the user tries to alt + tab it stays on top MWAHAHAHAHAHAHHAHAHAHAHAH i love tkinter if only i could override alt + f4
+    root.protocol("WM_DELETE_WINDOW", lambda: onAltF4(groups, questionY, responses)) #if they try to alt f$ THEY CANT MWAHHAHAHAHAHAHAHAHAHAH
     screen.mainloop()
     
 def onButtonClick(response):
-        
         
         global screen, root, midScreenX, midScreenY, accuracy, numQuestions, questionsRight
 
@@ -241,7 +242,10 @@ def onButtonClick(response):
             GenerateQuestions()
 
 
+def onAltF4(groups, questionY, responses):
 
+    screen.delete("all")
+    SetUpScreen(groups, questionY, responses) #they cant leave lmao
 
 if __name__ == "__main__":
     startTimer()

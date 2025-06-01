@@ -1,1 +1,1 @@
-A Ferris wheel with radius 10m rotates once/min. What is a rider's height above the ground after 15 seconds if they start at the bottom?
+Question: A sinusoidal function models temperature with a max of 26 and min of 10. What is the amplitude?
