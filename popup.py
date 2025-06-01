@@ -241,7 +241,6 @@ def onButtonClick(response):
             screen.delete("all")
             GenerateQuestions()
 
-
 def onAltF4(groups, questionY, responses):
 
     screen.delete("all")
