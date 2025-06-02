@@ -50,21 +50,6 @@ def main(prompt):
     print(answerB)
     print(answerC)
 
-    # file = open("questions/question.txt", "w")
-    # file.write(question)   
-    # file.close()
-
-    # file = open("questions/answerA.txt", "w")
-    # file.write(answerA)
-    # file.close()
-
-    # file = open("questions/answerB.txt", "w")
-    # file.write(answerB)
-    # file.close()
-
-    # file = open("questions/answerC.txt", "w")
-    # file.write(answerC)
-    # file.close()
 
     questionArray = [question, answerA, answerB, answerC]
     return questionArray

@@ -6,6 +6,7 @@ import popup
 root = Tk()
 root.title("Study Buddy!")
 screen = Canvas(root, width=800, height=600, bg="#2a243b")
+root.attributes("-topmost", True)
 screen.pack()
 
 #set up for dropdown menu
