@@ -107,6 +107,7 @@ def endSetup():
     showQuestions("Setup Complete!", "Press here to", "stop studying")
     stopStudyingButton = Button(root, text="Stop Studying", font="arial 15", command=stopStudying)
     screen.create_window(400, 550, window=stopStudyingButton)
+    root.attributes("-topmost", False)
     Popen(["python", "popup.py"])
 
 def showQuestions(question, question2, question3):

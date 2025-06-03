@@ -2,11 +2,9 @@ from tkinter import *
 from time import time, sleep
 import questions
 import random
+import google
 
-#set up timer
-startTime = time()
-
-global grade, subject, frequency, unit, screen, midScreenX, midScreenY, accuracy, numQuestions, questionsRight
+global grade, subject, frequency, unit, screen, midScreenX, midScreenY, accuracy, numQuestions, questionsRight, pastQuestions
 
 #get initial values from text files
 numQuestions = 0
@@ -30,6 +28,8 @@ file.close()
 file = open("unit.txt", "r")
 unit = file.read(-1)
 file.close()
+
+pastQuestions = []
 
 
 class response:
@@ -64,33 +64,37 @@ def startTimer():
         midScreenX = screen_width // 2
         midScreenY = screen_height // 2
 
-        GenerateQuestions()
+        while True: 
+            try:
+                GenerateQuestions()
+
+            except google.genai.errors.ServerError:
+                print("Server error, trying again...")
+                sleep(1)
+                GenerateQuestions()
+
+            else:
+                break
 
     else:
         pass #end studying :(
 
 def GenerateQuestions():
 
-    global grade, subject, unit
-
-    file = open("prevQuestion.txt", "r")
-    prevQuestion = file.read(-1)
-    file.close()
+    global grade, subject, unit, pastQuestions
 
 
     while True:
 
         #prompt to generate the question (its hella long lmao)
-        geminiPrompt = f"You are a helpful assistant that creates educational multiple choice questions based on the given prompts. The questions should all be from the ontario curriculum for high school, the grade and subject will be specified in the prompt Here is the prompt to create the question: Create a multiple-choice question for a high school student in grade {grade} studying the course {subject}. The student would like to study the following units in this course: {unit}. The question should be based on the Ontario curriculum and should have three answer choices (Answer A, Answer B and Answer C), do not label them at all as A B and C or 1 2 and 3, etc. Word the answers in a way where they do not go over 100 characters. The 3rd answer should always be the correcet answer (Answer C). Ensure that all the possible answers are different, and make sure the questions properly relate to the subject {subject}. Ensure that the question is not similar to the previous question which is this: {prevQuestion}. Dont be afraid to give word problems, just make the answer multiple choice. Do not include any special unicode characters, subscripts or super scripts, or accents on letters. Produce the response in exactly this format but do not include the brackets: (Question) | (Answer A) | (Answer B) | (Answer C). Here is an example of a good response: A clothing store marks up its items by 30%. If a shirt costs the store $15, what will be the selling price? | $17.50 | $18.00 | $19.50"
+        geminiPrompt = f"You are a helpful assistant that creates educational multiple choice questions based on the given prompts. The questions should all be from the ontario curriculum for high school, the grade and subject will be specified in the prompt Here is the prompt to create the question: Create a multiple-choice question for a high school student in grade {grade} studying the course {subject}. The student would like to study the following units in this course: {unit}. The question should be based on the Ontario curriculum and should have three answer choices (Answer A, Answer B and Answer C), do not label them at all as A B and C or 1 2 and 3, etc. Word the answers in a way where they do not go over 100 characters. The 3rd answer should always be the correcet answer (Answer C). Ensure that all the possible answers are different, and make sure the questions properly relate to the subject {subject}. Ensure that the question is not similar to the previous questions listed here: {pastQuestions}. Dont be afraid to give word problems, just make the answer multiple choice. Do not include any special unicode characters, subscripts or super scripts, or accents on letters. Produce the response in exactly this format but do not include the brackets: (Question) | (Answer A) | (Answer B) | (Answer C). Here is an example of a good response: A clothing store marks up its items by 30%. If a shirt costs the store $15, what will be the selling price? | $17.50 | $18.00 | $19.50"
         
 
         try:
             #get the question from gemini over in the questions file
             questionArray = questions.main(geminiPrompt) #generate question
 
-            file = open("prevQuestion.txt", "w")
-            file.write(questionArray[0])  # save the question to a file so it can be used for the previous question later on
-            file.close()
+            pastQuestions.append(questionArray[0]) #add the question to the past questions list
 
             print(questionArray)
 
@@ -247,6 +251,7 @@ def onAltF4(groups, questionY, responses):
     SetUpScreen(groups, questionY, responses) #they cant leave lmao
 
 if __name__ == "__main__":
+    
     startTimer()
 
 
