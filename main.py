@@ -41,7 +41,7 @@ def showFrequencyQuestion():
     showQuestions("How often would you", "like to get questions?", " (in minutes)")
 
     #dropdown menu
-    dropdownOptions = ["0.1", "0.5", "2", "5", "10", "15", "20"]
+    dropdownOptions = ["1", "2", "5", "10", "15", "20"]
     selectedOption.set(dropdownOptions[0])
     dropdown = OptionMenu(root, selectedOption, *dropdownOptions)
     screen.create_window(400, 400, window=dropdown)
@@ -102,7 +102,7 @@ def showUnitQuestion():
     screen.create_window(400, 500, window=submitButton)
 
 def endSetup():
-    #start the popup questions timer and file
+    #start the popup questions timer and fileppoiuytrewq    
     screen.delete("all")
     showQuestions("Setup Complete!", "Press here to", "stop studying")
     stopStudyingButton = Button(root, text="Stop Studying", font="arial 15", command=stopStudying)
