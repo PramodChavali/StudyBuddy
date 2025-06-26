@@ -4,6 +4,7 @@ Addicted to video games? Study Buddy will force you to study so you dont become 
 
 Using Tkinter, the program opens a window that completely overiddes whatever unproductive tasks you were doing before!
 
+![study buddy gif (3)](https://github.com/user-attachments/assets/897e45e1-9c89-4c78-9f7e-a9fa674ea2ee)
 
 This window can't be minimized or even closed with Alt + F4.
 
