@@ -1,6 +1,6 @@
 from tkinter import *
 from time import time, sleep
-from google import genai as gemini
+import google.generativeai as genai
 from random import uniform
 import os
 from dotenv import load_dotenv
@@ -27,13 +27,9 @@ file.close()
 
 
 def SetUpQuestion(prompt):
-    client = gemini.Client(api_key=apiKey)
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents= (prompt),
-
-    )
-
+    genai.configure(api_key=apiKey)
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    response = model.generate_content(prompt)
     return response.text
 
 def main(prompt):

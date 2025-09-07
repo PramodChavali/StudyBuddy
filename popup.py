@@ -2,7 +2,7 @@ from tkinter import *
 from time import time, sleep
 import questions
 import random
-import google
+import google.generativeai as genai
 
 global grade, subject, frequency, unit, screen, midScreenX, midScreenY, accuracy, numQuestions, questionsRight, pastQuestions
 
@@ -68,7 +68,7 @@ def startTimer():
             try:
                 GenerateQuestions()
 
-            except google.genai.errors.ServerError:
+            except genai.errors.ServerError:
                 print("Server error, trying again...")
                 sleep(1)
                 GenerateQuestions()
