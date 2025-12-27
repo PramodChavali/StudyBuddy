@@ -36,3 +36,4 @@ And sure enough, after 1 minute, my screen gets overridden with a grade 9 level 
 
 ![takeover](https://github.com/user-attachments/assets/ea1f52d5-c97c-42b2-a025-894d235a00bd)
 
+It even give you an accuracy score so you can keep track of how well prepared you are for your next test.
